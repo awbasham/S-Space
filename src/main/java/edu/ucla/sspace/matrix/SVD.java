@@ -25,6 +25,7 @@ import edu.ucla.sspace.matrix.MatrixIO.Format;
 import edu.ucla.sspace.matrix.Matrix.Type;
 
 import edu.ucla.sspace.matrix.factorization.SingularValueDecomposition;
+import edu.ucla.sspace.matrix.factorization.SingularValueDecompositionJAMA;
 import edu.ucla.sspace.matrix.factorization.SingularValueDecompositionLibC;
 import edu.ucla.sspace.matrix.factorization.SingularValueDecompositionMatlab;
 import edu.ucla.sspace.matrix.factorization.SingularValueDecompositionOctave;
@@ -153,8 +154,14 @@ public class SVD {
             return new SingularValueDecompositionMatlab();
         if (isOctaveAvailable())
             return new SingularValueDecompositionOctave();
+<<<<<<< HEAD
         throw new UnsupportedOperationException(
             "Cannot find a valid SVD implementation");
+=======
+        if (isJAMAAvailable())
+            return new SingularValueDecompositionJAMA();
+        throw new UnsupportedOperationException("Cannot find a valid SVD implementation");
+>>>>>>> abe45fc3e965bf64613796db8b4d619749292f21
     }
 
     /**
@@ -163,6 +170,7 @@ public class SVD {
      */
     public static SingularValueDecomposition getFactorization(Algorithm alg) {
         switch (alg)  {
+            case JAMA: return new SingularValueDecompositionJAMA();
             case MATLAB: return new SingularValueDecompositionMatlab();
             case OCTAVE: return new SingularValueDecompositionOctave();
             case SVDLIBC: return new SingularValueDecompositionLibC();
@@ -191,7 +199,7 @@ public class SVD {
             return Algorithm.MATLAB;
         else if (isOctaveAvailable())
             return Algorithm.OCTAVE;
-        else if (isJAMAavailable())
+        else if (isJAMAAvailable())
             return Algorithm.JAMA;
         else if (isColtAvailable())
             return Algorithm.COLT;
@@ -443,7 +451,7 @@ public class SVD {
     /**
      * Returns {@code true} if the JAMA library is available
      */
-    private static boolean isJAMAavailable() {
+    private static boolean isJAMAAvailable() {
         try {
             Class<?> clazz = loadJamaMatrixClass();
         } catch (ClassNotFoundException cnfe) {
@@ -680,7 +688,7 @@ public class SVD {
         // package.
         try {
             SVD_LOGGER.fine("attempting JAMA");
-            isJAMAavailable();
+            isJAMAAvailable();
 
             int rows = inputMatrix.length;
             int cols = inputMatrix[0].length; // assume at least one row
